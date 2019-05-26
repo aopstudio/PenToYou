@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import entity.Article;
+import service.ArticleService;;
 
 /**
  * Servlet implementation class NewOpening
@@ -37,9 +39,14 @@ public class NewArticle extends HttpServlet {
 		// TODO Auto-generated method stub
 		String userid=request.getParameter("userid");
 		String title=request.getParameter("title");
-		String intro=request.getParameter("intro");
-		String content=request.getParameter("content");
-		
+		String description=request.getParameter("description");
+		String opening=request.getParameter("opening");
+		Article article=new Article();
+		article.setTitle(title);
+		article.setDescription(description);
+		article.setOpening(opening);
+		ArticleService.addArticle(userid, article);
+		response.getWriter().print("create success");
 	}
 
 }

@@ -60,7 +60,7 @@ public class Article {
         this.category = category;
     }
 
-    public Article(String id, String title, String descripition, String picurl, String opening, String category) {
+    public Article(String id, String title, String description, String picurl, String opening, String category) {
         this.id = id;
         this.title = title;
         this.description = description;
