@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class BaseDao {
         private String driver = "com.mysql.jdbc.Driver";
-        private String url = "jdbc:mysql://39.106.66.138:3306/weixinxiaochengxu";
+        private String url = "jdbc:mysql://39.106.66.138:3306/weixinxiaochengxu?useUnicode=true&characterEncoding=utf-8";
         private String username = "root";
         private String password = "caowenhao@CWH9808";
         public static Connection con = null;

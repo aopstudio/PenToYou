@@ -7,6 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entity.Article;
+import service.ArticleService;
+import service.UserService;
+import tool.Key;
+
 /**
  * Servlet implementation class NewOpening
  */
@@ -35,11 +40,17 @@ public class NewArticle extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String userid=request.getParameter("userid");
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=utf-8");
+		String userid=Key.md5s(request.getParameter("userid"));
 		String title=request.getParameter("title");
-		String intro=request.getParameter("intro");
-		String content=request.getParameter("content");
-		
+		String description=request.getParameter("description");
+		String opening=request.getParameter("opening");
+		String id=String.valueOf(ArticleService.articleAmount()+1);
+		String author=UserService.getUserById(userid).getName();
+		Article article=new Article(author,id,title,description,null,opening,null);
+		ArticleService.addArticle(userid,article);
+		response.getWriter().print("新建成功");
 	}
 
 }

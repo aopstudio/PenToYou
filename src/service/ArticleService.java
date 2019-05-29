@@ -9,7 +9,9 @@ public class ArticleService {
     public static boolean addArticle(Article article){
         return dao.addArticle(article);
     }
-
+    public static boolean addArticle(String userId, Article article){
+    	return dao.addArticle(userId, article);
+    }
     public static Article getArticleById(String id){
         return dao.getArticleById(id);
     }
@@ -40,5 +42,9 @@ public class ArticleService {
 
     public static boolean updateArticle(Article article){
         return  dao.updateArticle(article);
+    }
+
+    public static int articleAmount(){
+        return dao.articleAmount();
     }
 }

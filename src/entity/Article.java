@@ -1,7 +1,8 @@
 package entity;
 
 public class Article {
-    private String id;
+	private String author;
+	private String id;
     private String title;
     private String description;
     private String picurl;
@@ -11,6 +12,13 @@ public class Article {
     public Article() {
 
     }
+    public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
     public String getId() {
         return id;
@@ -60,8 +68,9 @@ public class Article {
         this.category = category;
     }
 
-    public Article(String id, String title, String descripition, String picurl, String opening, String category) {
-        this.id = id;
+    public Article(String author,String id, String title, String description, String picurl, String opening, String category) {
+        this.author=author;
+    	this.id = id;
         this.title = title;
         this.description = description;
         this.picurl = picurl;

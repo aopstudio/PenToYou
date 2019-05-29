@@ -5,6 +5,7 @@ import entity.Chapter;
 import entity.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ChapterDao extends BaseDao {
 
@@ -19,6 +20,14 @@ public class ChapterDao extends BaseDao {
         ResultSet rs = super.executeSelect("select * from chapter where id = ?", objects);
         return this.excuteRS(rs);
     }
+    
+    public ArrayList<Chapter> getChaptersByPid(String pid){
+    	String state=pid+"%";
+        Object[] objects = new Object[]{state};
+        ResultSet rs = super.executeSelect("select * from chapter where id like ?", objects);
+        return this.excuteRSS(rs);
+    }
+    
 
     private Chapter excuteRS(ResultSet rs){
         Chapter targetChapter = new Chapter();
@@ -35,61 +44,66 @@ public class ChapterDao extends BaseDao {
         }
         return targetChapter;
     }
+    private ArrayList<Chapter> excuteRSS(ResultSet rs){
+    	ArrayList<Chapter> chapters=new ArrayList<Chapter>();
+        try {
+            while(rs.next()) {
+            	Chapter targetChapter = new Chapter();
+                targetChapter.setId(rs.getString(1));
+                targetChapter.setTitle(rs.getString(2));
+                targetChapter.setContent(rs.getString(3));
+                chapters.add(targetChapter);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            super.closeAll(super.con, super.pst, rs);
+        }
+        return chapters;
+    }
 
-    public void addChapter(Chapter chapter) {
+    private void addChapter(Chapter chapter) {
         Object[] objects = new Object[]{chapter.getId(), chapter.getTitle(), chapter.getContent()};
         super.executeIUD("insert into chapter values(?, ?, ?)", objects);
     }
 
-    public void addSubChapter(Chapter parent, Chapter sub){
-        Object[] objects = new Object[]{parent.getId(), sub.getId()};
-        super.executeIUD("insert into chapter_sub values(?, ?)", objects);
-    }
-
-    public void addSubChapterToArticle(String articleId, Chapter sub){
-        Object[] objects = new Object[]{articleId, sub.getId()};
-        super.executeIUD("insert into chapter_sub values(?, ?)", objects);
-    }
-
-    public void addSubChapter(Article article, Chapter chapter){
-        Object[] objects = new Object[]{article.getId(), chapter.getId()};
-        super.executeIUD("insert into article_chapter values(?, ?)", objects);
-    }
-
-    public void addSubChapter(String articleId, Chapter chapter){
-        Object[] objects = new Object[]{articleId, chapter.getId()};
-        super.executeIUD("insert into article_chapter values(?, ?)", objects);
-    }
-
-    public boolean addChapter(User user, Article article, Chapter chapter){
-        Object[] objects = new Object[]{user.getId(), chapter.getId()};
-        int count = super.executeIUD("insert into user_chapters values(?,?)",objects);
-        this.addChapter(chapter);
-        this.addSubChapter(article, chapter);
-        return count > 0 ? true : false ;
-    }
-
-    public boolean addChapterToArticle(String userId, String articleId, Chapter chapter){
-        Object[] objects = new Object[]{userId, chapter.getId()};
-        int count = super.executeIUD("insert into user_chapters values(?,?)",objects);
-        this.addChapter(chapter);
-        this.addSubChapter(articleId,chapter);
-        return count > 0 ? true : false ;
-    }
-
-    public boolean addChapter(User user, Chapter parentChapter, Chapter subChapter){
-        Object[] objects = new Object[]{user.getId(), subChapter.getId()};
+    public boolean addChapter(String userId, String pid, Chapter subChapter){
+        Object[] objects = new Object[]{userId, subChapter.getId()};
         int count = super.executeIUD("insert into user_chapters values(?,?)",objects);
         this.addChapter(subChapter);
-        this.addSubChapter(parentChapter, subChapter);
+        this.addSubChapter(pid, subChapter);
         return count > 0 ? true : false ;
     }
-
-    public boolean addChapterToChapter(String userId, String chapterId, Chapter chapter){
-        Object[] objects = new Object[]{userId, chapter.getId()};
-        int count = super.executeIUD("insert into user_chapters values(?,?)",objects);
-        this.addSubChapterToArticle(chapterId, chapter);
-        this.addChapter(chapter);
+    
+    public boolean addSubChapter(String pid, Chapter sub){
+        Object[] objects = new Object[]{pid, sub.getId()};
+        int count = super.executeIUD("insert into subchapter values(?, ?)", objects);
         return count > 0 ? true : false ;
+    }
+    
+    public int chapterAmount(){
+        ResultSet rs = super.executeSelect("select count(*) from chapter", null);
+        int amount = 0;
+        try{
+            if(rs.next()){
+                amount = rs.getInt(1);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return amount;
+    }
+    public int subChapterAmount(String pid){
+    	Object[] objects = new Object[]{pid};
+        ResultSet rs = super.executeSelect("select count(*) from subchapter where pid = ?", objects);
+        int amount = 0;
+        try{
+            if(rs.next()){
+                amount = rs.getInt(1);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return amount;
     }
 }

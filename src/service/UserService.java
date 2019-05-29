@@ -29,5 +29,13 @@ public class UserService {
     public static boolean deleteUserByName(String name){
         return dao.deleteUserByName(name);
     }
+
+    public static int userChapterAmount(String id){
+        return dao.userChapterAmount(id);
+    }
+
+    public static int userArticleAmount(String id){
+        return dao.userArticleAmount(id);
+    }
 }
 

@@ -7,21 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.Chapter;
-import service.ChapterService;
-import tool.Key;
+import entity.Article;
+import service.ArticleService;
 
 /**
- * Servlet implementation class NewContinue
+ * Servlet implementation class ArticleInfo
  */
-@WebServlet("/NewChapter")
-public class NewChapter extends HttpServlet {
+@WebServlet("/ArticleInfo")
+public class ArticleInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NewChapter() {
+    public ArticleInfo() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,16 +39,8 @@ public class NewChapter extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=utf-8");
-		String userid=Key.md5s(request.getParameter("userid"));
-		String title=request.getParameter("title");
-		String pid=request.getParameter("pid");
-		String content=request.getParameter("content");
-		int subChapterAmount=ChapterService.subChapterAmount(pid);
-		int subid=subChapterAmount+1;
-		String id=pid+"-"+subid;
-		Chapter chapter=new Chapter(id, content, title);
-		ChapterService.addChapter(userid, pid, chapter);
-
+		String id=request.getParameter("id");
+		Article article=ArticleService.getArticleById(id);
 		
 	}
 

@@ -8,8 +8,8 @@ import java.sql.SQLException;
 
 public class ArticleDao extends BaseDao {
     public boolean addArticle(Article article){
-        Object[] objects = new Object[]{article.getTitle(), article.getId(),article.getDescription(), article.getPicurl(),article.getOpening(), article.getCategory()};
-        int count = super.executeIUD("insert into article values(?,?,?,?,?,?)",objects);
+        Object[] objects = new Object[]{article.getAuthor(),article.getTitle(), article.getId(),article.getDescription(), article.getPicurl(),article.getOpening(), article.getCategory()};
+        int count = super.executeIUD("insert into article values(?,?,?,?,?,?,?)",objects);
         return count > 0 ? true : false;
     }
 
@@ -29,12 +29,13 @@ public class ArticleDao extends BaseDao {
         Article targetArticle = new Article();
         try{
             if(rs.next()){
-                targetArticle.setTitle(rs.getString(1));
-                targetArticle.setId(rs.getString(2));
-                targetArticle.setDescription(rs.getString(3));
-                targetArticle.setPicurl(rs.getString(4));
-                targetArticle.setOpening(rs.getString(5));
-                targetArticle.setCategory(rs.getString(6));
+            	targetArticle.setAuthor(rs.getString(1));
+                targetArticle.setTitle(rs.getString(2));
+                targetArticle.setId(rs.getString(3));
+                targetArticle.setDescription(rs.getString(4));
+                targetArticle.setPicurl(rs.getString(5));
+                targetArticle.setOpening(rs.getString(6));
+                targetArticle.setCategory(rs.getString(7));
             }
         } catch (SQLException e){
             e.printStackTrace();;
@@ -73,8 +74,8 @@ public class ArticleDao extends BaseDao {
     }
 
     public boolean updateArticle(Article article){
-        Object[] objects = new Object[]{article.getTitle(), article.getId(), article.getDescription(), article.getPicurl(), article.getOpening(), article.getCategory(), article.getId()};
-        int count = super.executeIUD("update article set title=?,id=?,description=?,picurl=?,opening=?,category=? where id=?", objects);
+        Object[] objects = new Object[]{article.getAuthor(),article.getTitle(), article.getId(), article.getDescription(), article.getPicurl(), article.getOpening(), article.getCategory(), article.getId()};
+        int count = super.executeIUD("update article set author=?,title=?,id=?,description=?,picurl=?,opening=?,category=? where id=?", objects);
         return count > 0 ? true : false;
     }
 
@@ -90,5 +91,18 @@ public class ArticleDao extends BaseDao {
         int count = super.executeIUD("insert into user_articles values(?,?)",objects);
         this.addArticle(article);
         return count > 0 ? true : false ;
+    }
+
+    public int articleAmount(){
+        ResultSet rs = super.executeSelect("select count(*) from article", null);
+        int amount = 0;
+        try{
+            if(rs.next()){
+                amount = rs.getInt(1);
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return amount;
     }
 }

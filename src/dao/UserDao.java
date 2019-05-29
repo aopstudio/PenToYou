@@ -58,4 +58,30 @@ public class UserDao extends BaseDao {
         return count > 0 ? true : false;
     }
 
+    public int userChapterAmount(String id){
+        Object[] objects = new Object[]{id};
+        ResultSet rs = super.executeSelect("select sum(*) from user_chapters where userId=?", objects);
+
+        return this.amount(rs);
+    }
+
+    public int userArticleAmount(String id){
+        Object[] objects = new Object[]{id};
+        ResultSet rs = super.executeSelect("select sum(*) from user_articles where userId=?", objects);
+
+        return this.amount(rs);
+    }
+
+    private int amount(ResultSet rs){
+        int amount = 0;
+        try{
+            if(rs.next()){
+                amount = rs.getInt(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return amount;
+    }
+
 }
