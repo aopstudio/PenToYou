@@ -6,8 +6,8 @@ import entity.Article;
 public class ArticleService {
     private static ArticleDao dao = new ArticleDao();
 
-    public static boolean addArticle(Article article){
-        return dao.addArticle(article);
+    public static boolean addArticle(String userId,Article article){
+        return dao.addArticle(userId,article);
     }
     public static boolean addArticle(String userId, Article article){
     	return dao.addArticle(userId, article);
