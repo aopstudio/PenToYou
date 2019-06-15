@@ -5,6 +5,7 @@ import entity.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ArticleDao extends BaseDao {
     public boolean addArticle(Article article){
@@ -104,5 +105,34 @@ public class ArticleDao extends BaseDao {
             e.printStackTrace();
         }
         return amount;
+    }
+    
+    public ArrayList<Article> getArticlesByUserId(String userid){
+    	Object[] objects = new Object[]{userid};
+    	ArrayList<Article> articles=new ArrayList<Article>();
+    	ResultSet rs = super.executeSelect("select * from user_articles where userId=?", objects);
+    	String articleId;
+    	try {
+			while(rs.next()) {			
+				articleId=rs.getString(2);
+				objects = new Object[]{articleId};
+				ResultSet newRs=super.executeSelect("select * from article where id=?", objects);
+				if(newRs.next()) {
+					Article targetArticle=new Article();
+					targetArticle.setAuthor(newRs.getString(1));
+	                targetArticle.setTitle(newRs.getString(2));
+	                targetArticle.setId(newRs.getString(3));
+	                targetArticle.setDescription(newRs.getString(4));
+	                targetArticle.setPicurl(newRs.getString(5));
+	                targetArticle.setOpening(newRs.getString(6));
+	                targetArticle.setCategory(newRs.getString(7));
+	                articles.add(targetArticle);
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return articles;
     }
 }

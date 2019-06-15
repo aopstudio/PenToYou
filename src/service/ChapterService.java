@@ -30,4 +30,7 @@ public class ChapterService {
     public static int subChapterAmount(String pid){
         return dao.subChapterAmount(pid);
     }
+    public static ArrayList<Article> getChaptersArticlesByUserId(String userid) {
+		return dao.getChaptersArticlesByUserId(userid);
+	}
 }

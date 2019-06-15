@@ -1,14 +1,13 @@
 package service;
 
+import java.util.ArrayList;
+
 import dao.ArticleDao;
 import entity.Article;
 
 public class ArticleService {
     private static ArticleDao dao = new ArticleDao();
 
-    public static boolean addArticle(String userId,Article article){
-        return dao.addArticle(userId,article);
-    }
     public static boolean addArticle(String userId, Article article){
     	return dao.addArticle(userId, article);
     }
@@ -19,7 +18,9 @@ public class ArticleService {
     public static Article getArticleByTitle(String title){
         return dao.getArticleByTitle(title);
     }
-
+    public static ArrayList<Article> getArticlesByUserId(String userid) {
+		return dao.getArticlesByUserId(userid);
+	}
     public static boolean deleteArticel(Article article){
         return dao.deleteArticle(article);
     }

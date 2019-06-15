@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import entity.Article;
+import entity.RecommendInfo;
 import service.ArticleService;
 
 /**
@@ -72,7 +73,8 @@ public class Recommend extends HttpServlet {
 				Article article2=ArticleService.getArticleById(String.valueOf(num2));
 				Article article3=ArticleService.getArticleById(String.valueOf(num3));
 				Article article4=ArticleService.getArticleById(String.valueOf(num4));
-				List<Article> lst = new ArrayList<Article>();
+				
+				ArrayList<Article> lst = new ArrayList<Article>();
 				lst.add(article1);
 				lst.add(article2);
 				lst.add(article3);

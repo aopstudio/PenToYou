@@ -106,4 +106,38 @@ public class ChapterDao extends BaseDao {
         }
         return amount;
     }
+    public ArrayList<Article> getChaptersArticlesByUserId(String userid){
+    	Object[] objects = new Object[]{userid};
+    	ArrayList<Article> articles=new ArrayList<Article>();
+    	ResultSet rs = super.executeSelect("select * from user_chapters where userId=?", objects);
+    	String chapterId;
+    	String articleId;
+    	String artId="0";
+    	try {
+			while(rs.next()) {			
+				chapterId=rs.getString(2);
+				articleId=chapterId.substring(0,chapterId.indexOf("-"));
+				if(!articleId.equals(artId)) {
+					objects = new Object[]{articleId};
+					ResultSet newRs=super.executeSelect("select * from article where id=?", objects);
+					if(newRs.next()) {
+						Article targetArticle=new Article();
+						targetArticle.setAuthor(newRs.getString(1));
+		                targetArticle.setTitle(newRs.getString(2));
+		                targetArticle.setId(newRs.getString(3));
+		                targetArticle.setDescription(newRs.getString(4));
+		                targetArticle.setPicurl(newRs.getString(5));
+		                targetArticle.setOpening(newRs.getString(6));
+		                targetArticle.setCategory(newRs.getString(7));
+		                articles.add(targetArticle);
+					}
+					artId=articleId;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return articles;
+    }
 }
